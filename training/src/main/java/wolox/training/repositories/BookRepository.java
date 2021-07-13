@@ -16,7 +16,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
      * Find by author optional.
      *
      * @param author the author
-     * @return the optional <book>
+     * @return the optional {@link Book}
      */
     Optional<Book> findByAuthor(String author);
 }
