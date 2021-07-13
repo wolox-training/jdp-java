@@ -6,6 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * The class Book model.
+ */
 @Entity
 public class Book {
 
@@ -119,19 +122,4 @@ public class Book {
         this.isbn = isbn;
     }
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", genre='" + genre + '\'' +
-                ", author='" + author + '\'' +
-                ", image='" + image + '\'' +
-                ", title='" + title + '\'' +
-                ", subtitle='" + subtitle + '\'' +
-                ", publisher='" + publisher + '\'' +
-                ", year='" + year + '\'' +
-                ", pages=" + pages +
-                ", isbn='" + isbn + '\'' +
-                '}';
-    }
 }
