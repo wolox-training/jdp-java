@@ -9,6 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static wolox.training.utils.ErrorMessage.NOT_NULL_MESSAGE;
+
 /**
  * The class Book model.
  */
@@ -69,6 +72,7 @@ public class Book {
     }
 
     public void setGenre(String genre) {
+        checkNotNull(genre, NOT_NULL_MESSAGE);
         this.genre = genre;
     }
 
@@ -77,6 +81,7 @@ public class Book {
     }
 
     public void setAuthor(String author) {
+        checkNotNull(author, NOT_NULL_MESSAGE);
         this.author = author;
     }
 
@@ -85,6 +90,7 @@ public class Book {
     }
 
     public void setImage(String image) {
+        checkNotNull(image, NOT_NULL_MESSAGE);
         this.image = image;
     }
 
@@ -93,6 +99,7 @@ public class Book {
     }
 
     public void setTitle(String title) {
+        checkNotNull(title, NOT_NULL_MESSAGE);
         this.title = title;
     }
 
@@ -101,6 +108,7 @@ public class Book {
     }
 
     public void setSubtitle(String subtitle) {
+        checkNotNull(subtitle, NOT_NULL_MESSAGE);
         this.subtitle = subtitle;
     }
 
@@ -109,6 +117,7 @@ public class Book {
     }
 
     public void setPublisher(String publisher) {
+        checkNotNull(publisher, NOT_NULL_MESSAGE);
         this.publisher = publisher;
     }
 
@@ -117,6 +126,7 @@ public class Book {
     }
 
     public void setYear(String year) {
+        checkNotNull(year, NOT_NULL_MESSAGE);
         this.year = year;
     }
 
@@ -125,6 +135,7 @@ public class Book {
     }
 
     public void setPages(int pages) {
+        checkNotNull(pages, NOT_NULL_MESSAGE);
         this.pages = pages;
     }
 
@@ -133,6 +144,7 @@ public class Book {
     }
 
     public void setIsbn(String isbn) {
+        checkNotNull(isbn, NOT_NULL_MESSAGE);
         this.isbn = isbn;
     }
 

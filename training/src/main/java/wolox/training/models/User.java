@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static wolox.training.utils.ErrorMessage.BIRTHDAY_BEFORE_CURRENTDATE;
+import static wolox.training.utils.ErrorMessage.NOT_NULL_MESSAGE;
+
 @Entity
 @Table(name = "users")
 @ApiModel(description = "Users from database")
@@ -53,6 +58,7 @@ public class User {
     }
 
     public void setUserName(String username) {
+        checkNotNull(username, NOT_NULL_MESSAGE);
         this.username = username;
     }
 
@@ -61,6 +67,7 @@ public class User {
     }
 
     public void setName(String name) {
+        checkNotNull(name, NOT_NULL_MESSAGE);
         this.name = name;
     }
 
@@ -69,6 +76,8 @@ public class User {
     }
 
     public void setBirthdate(LocalDate birthdate) {
+        checkNotNull(birthdate, NOT_NULL_MESSAGE);
+        checkArgument(birthdate.isBefore(LocalDate.now()), BIRTHDAY_BEFORE_CURRENTDATE);
         this.birthdate = birthdate;
     }
 
@@ -77,6 +86,7 @@ public class User {
     }
 
     public void setBooks(List<Book> books) {
+        checkNotNull(books, NOT_NULL_MESSAGE);
         this.books = books;
     }
 
