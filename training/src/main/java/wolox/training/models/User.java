@@ -9,7 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,7 +44,10 @@ public class User {
     private LocalDate birthdate;
 
     @Column(nullable = false)
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "book_user",
+            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     @ApiModelProperty(notes = "The user books: books associated to user")
     private List<Book> books = new ArrayList<>();
 
@@ -53,11 +58,11 @@ public class User {
         return id;
     }
 
-    public String getUserName() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUserName(String username) {
+    public void setUsername(String username) {
         checkNotNull(username, NOT_NULL_MESSAGE);
         this.username = username;
     }
@@ -71,7 +76,7 @@ public class User {
         this.name = name;
     }
 
-    public LocalDate getBirthDate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
