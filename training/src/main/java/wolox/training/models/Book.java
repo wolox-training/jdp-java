@@ -2,6 +2,8 @@ package wolox.training.models;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +18,8 @@ import static wolox.training.utils.ErrorMessage.NOT_NULL_MESSAGE;
  * The class Book model.
  */
 @Entity
+@Getter
+@Setter
 @ApiModel(description = "Books from database")
 public class Book {
 
@@ -63,8 +67,12 @@ public class Book {
     public Book() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getGenre() {

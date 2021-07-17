@@ -1,5 +1,9 @@
 package wolox.training.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import wolox.training.exceptions.BookAlreadyOwnedException;
@@ -40,6 +44,8 @@ public class User {
     private String name;
 
     @Column(nullable = false)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     @ApiModelProperty(notes = "The birth date of the user")
     private LocalDate birthdate;
 
@@ -54,8 +60,12 @@ public class User {
     public User() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
