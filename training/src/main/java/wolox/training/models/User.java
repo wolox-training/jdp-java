@@ -50,12 +50,17 @@ public class User {
     private LocalDate birthdate;
 
     @Column(nullable = false)
+    @ApiModelProperty(notes = "The user password")
+    private String password;
+
+    @Column(nullable = false)
     @ManyToMany
     @JoinTable(name = "book_user",
             joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     @ApiModelProperty(notes = "The user books: books associated to user")
     private List<Book> books = new ArrayList<>();
+
 
     public User() {
     }
@@ -105,6 +110,14 @@ public class User {
     public void setBooks(List<Book> books) {
         checkNotNull(books, NOT_NULL_MESSAGE);
         this.books = books;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     /**
