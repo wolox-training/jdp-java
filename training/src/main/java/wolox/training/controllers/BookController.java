@@ -85,7 +85,7 @@ public class BookController {
      * @param {@link Book} the book
      * @param id:    the id of the book
      * @return {@link Book}
-     * @throws IdMismatchException     when book not found
+     * @throws IdMismatchException     when id's doesn't match
      * @throws BookIdNotFoundException when book not found
      */
     @PutMapping(EndPoints.PATH_CONSTANT_ID)
