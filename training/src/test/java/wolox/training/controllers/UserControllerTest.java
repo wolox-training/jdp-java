@@ -104,7 +104,7 @@ public class UserControllerTest {
     @Test
     public void whenFindOneUser_thenReturnOkay() throws Exception {
 
-        Mockito.when(userRepository.findById(19L)).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findById(TestConstants.USER_EXISTS_19)).thenReturn(Optional.of(user));
         mvc.perform(get(EndPoints.USER_BASE_PATH + TestConstants.USER_MOCK_ID_19))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username", is("rucho")));
@@ -113,7 +113,7 @@ public class UserControllerTest {
     @Test
     public void whenCannotFindOneUser_thenReturnNotFound() throws Exception {
 
-        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findById(TestConstants.USER_NOT_EXISTS_19)).thenReturn(Optional.of(user));
         mvc.perform(get(EndPoints.USER_BASE_PATH + TestConstants.USER_MOCK_ID_19))
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof UserNotFoundException));
@@ -128,10 +128,9 @@ public class UserControllerTest {
                 .andExpect(status().isCreated());
     }
 
-
     @Test
     void whenDeleteAUserThatExists_thenReturnAccepted() throws Exception {
-        doNothing().when(userRepository).deleteById(18L);
+        doNothing().when(userRepository).deleteById(TestConstants.USER_EXISTS_19);
         mvc.perform(delete(EndPoints.USER_BASE_PATH + TestConstants.USER_MOCK_ID_19)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
