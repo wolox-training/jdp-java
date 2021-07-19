@@ -2,6 +2,7 @@ package wolox.training.models;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.util.ObjectUtils;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 
 import javax.persistence.Column;
@@ -20,8 +21,7 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static wolox.training.utils.ErrorMessage.BIRTHDAY_BEFORE_CURRENTDATE;
-import static wolox.training.utils.ErrorMessage.NOT_NULL_MESSAGE;
+import static wolox.training.utils.ErrorMessage.*;
 
 @Entity
 @Table(name = "users")
@@ -64,6 +64,7 @@ public class User {
 
     public void setUsername(String username) {
         checkNotNull(username, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(username), EMPTY_MESSAGE);
         this.username = username;
     }
 
@@ -73,6 +74,7 @@ public class User {
 
     public void setName(String name) {
         checkNotNull(name, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(name), EMPTY_MESSAGE);
         this.name = name;
     }
 
