@@ -25,6 +25,11 @@ dependencies {
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     implementation 'org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE'
     implementation group: 'com.google.guava', name: 'guava', version: '27.0-jre'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.h2database:h2:1.4.200'
+    implementation 'junit:junit:4.13.1'
+    implementation 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
 }
 
 test {

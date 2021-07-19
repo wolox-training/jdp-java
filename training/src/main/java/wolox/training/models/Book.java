@@ -66,8 +66,12 @@ public class Book {
     public Book() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getGenre() {
@@ -141,14 +145,14 @@ public class Book {
         this.year = year;
     }
 
-    public int getPages() {
+    public Integer getPages() {
         return pages;
     }
 
-    public void setPages(int pages) {
+    public void setPages(Integer pages) {
         checkNotNull(pages, NOT_NULL_MESSAGE);
         checkArgument(!ObjectUtils.isEmpty(pages), EMPTY_MESSAGE);
-        checkArgument(pages <= 0, MORE_PAGES);
+        checkArgument(pages > 0, MORE_PAGES);
         this.pages = pages;
     }
 
