@@ -2,6 +2,7 @@ package wolox.training.models;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.util.ObjectUtils;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 
 import javax.persistence.Column;
@@ -9,12 +10,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static wolox.training.utils.ErrorMessage.*;
 
 @Entity
 @Table(name = "users")
@@ -37,7 +44,10 @@ public class User {
     private LocalDate birthdate;
 
     @Column(nullable = false)
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "book_user",
+            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     @ApiModelProperty(notes = "The user books: books associated to user")
     private List<Book> books = new ArrayList<>();
 
@@ -48,11 +58,13 @@ public class User {
         return id;
     }
 
-    public String getUserName() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUserName(String username) {
+    public void setUsername(String username) {
+        checkNotNull(username, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(username), EMPTY_MESSAGE);
         this.username = username;
     }
 
@@ -61,14 +73,18 @@ public class User {
     }
 
     public void setName(String name) {
+        checkNotNull(name, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(name), EMPTY_MESSAGE);
         this.name = name;
     }
 
-    public LocalDate getBirthDate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
     public void setBirthdate(LocalDate birthdate) {
+        checkNotNull(birthdate, NOT_NULL_MESSAGE);
+        checkArgument(birthdate.isBefore(LocalDate.now()), BIRTHDAY_BEFORE_CURRENTDATE);
         this.birthdate = birthdate;
     }
 
@@ -77,6 +93,7 @@ public class User {
     }
 
     public void setBooks(List<Book> books) {
+        checkNotNull(books, NOT_NULL_MESSAGE);
         this.books = books;
     }
 

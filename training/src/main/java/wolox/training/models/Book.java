@@ -2,12 +2,18 @@ package wolox.training.models;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static wolox.training.utils.ErrorMessage.*;
 
 /**
  * The class Book model.
@@ -69,6 +75,8 @@ public class Book {
     }
 
     public void setGenre(String genre) {
+        checkNotNull(genre, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(genre), EMPTY_MESSAGE);
         this.genre = genre;
     }
 
@@ -77,6 +85,8 @@ public class Book {
     }
 
     public void setAuthor(String author) {
+        checkNotNull(author, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(author), EMPTY_MESSAGE);
         this.author = author;
     }
 
@@ -85,6 +95,8 @@ public class Book {
     }
 
     public void setImage(String image) {
+        checkNotNull(image, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(image), EMPTY_MESSAGE);
         this.image = image;
     }
 
@@ -93,6 +105,8 @@ public class Book {
     }
 
     public void setTitle(String title) {
+        checkNotNull(title, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(title), EMPTY_MESSAGE);
         this.title = title;
     }
 
@@ -101,6 +115,8 @@ public class Book {
     }
 
     public void setSubtitle(String subtitle) {
+        checkNotNull(subtitle, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(subtitle), EMPTY_MESSAGE);
         this.subtitle = subtitle;
     }
 
@@ -109,6 +125,8 @@ public class Book {
     }
 
     public void setPublisher(String publisher) {
+        checkNotNull(publisher, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(publisher), EMPTY_MESSAGE);
         this.publisher = publisher;
     }
 
@@ -117,6 +135,9 @@ public class Book {
     }
 
     public void setYear(String year) {
+        checkNotNull(year, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(year), EMPTY_MESSAGE);
+        checkArgument(Long.parseLong(year) < LocalDate.now().getYear(), YEAR_AFTER);
         this.year = year;
     }
 
@@ -125,6 +146,9 @@ public class Book {
     }
 
     public void setPages(int pages) {
+        checkNotNull(pages, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(pages), EMPTY_MESSAGE);
+        checkArgument(pages <= 0, MORE_PAGES);
         this.pages = pages;
     }
 
@@ -133,6 +157,8 @@ public class Book {
     }
 
     public void setIsbn(String isbn) {
+        checkNotNull(isbn, NOT_NULL_MESSAGE);
+        checkArgument(!ObjectUtils.isEmpty(isbn), EMPTY_MESSAGE);
         this.isbn = isbn;
     }
 
