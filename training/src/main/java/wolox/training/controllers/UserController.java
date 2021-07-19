@@ -20,6 +20,7 @@ import wolox.training.repositories.UserRepository;
 import wolox.training.utils.EndPoints;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The type User controller.
@@ -116,9 +117,9 @@ public class UserController {
     @PutMapping(EndPoints.PATH_CONSTANT_ID +
             EndPoints.BOOKS_PATH + EndPoints.BOOK_ID_PATH)
     public User addBook(@PathVariable long id, @PathVariable long bookId) {
-        User user = findOne(id);
-        user.addBook(bookRepository.findById(bookId).orElseThrow(BookIdNotFoundException::new));
-        return userRepository.save(user);
+        Optional<User> user = userRepository.findById(id);
+        user.get().addBook(bookRepository.findById(bookId).orElseThrow(BookIdNotFoundException::new));
+        return userRepository.save(user.get());
     }
 
     /**
@@ -132,9 +133,9 @@ public class UserController {
     @DeleteMapping(EndPoints.PATH_CONSTANT_ID +
             EndPoints.BOOKS_PATH + EndPoints.BOOK_ID_PATH)
     public User removeBook(@PathVariable long id, @PathVariable long bookId) {
-        User user = findOne(id);
-        user.removeBook(bookRepository.findById(bookId).orElseThrow(BookIdNotFoundException::new));
-        return userRepository.save(user);
+        Optional<User> user = userRepository.findById(id);
+        user.get().removeBook(bookRepository.findById(bookId).orElseThrow(BookIdNotFoundException::new));
+        return userRepository.save(user.get());
     }
 
 }
