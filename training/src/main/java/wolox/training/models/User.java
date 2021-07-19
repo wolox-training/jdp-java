@@ -1,5 +1,7 @@
 package wolox.training.models;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 
 import javax.persistence.Column;
@@ -16,22 +18,27 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@ApiModel(description = "Users from database")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false)
+    @ApiModelProperty(notes = "The user username")
     private String username;
 
     @Column(nullable = false)
+    @ApiModelProperty(notes = "The user fullname")
     private String name;
 
     @Column(nullable = false)
+    @ApiModelProperty(notes = "The birth date of the user")
     private LocalDate birthdate;
 
     @Column(nullable = false)
     @OneToMany
+    @ApiModelProperty(notes = "The user books: books associated to user")
     private List<Book> books = new ArrayList<>();
 
     public User() {

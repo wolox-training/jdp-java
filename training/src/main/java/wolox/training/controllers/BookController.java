@@ -1,5 +1,9 @@
 package wolox.training.controllers;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(EndPoints.BOOK_BASE_PATH)
+@Api
 public class BookController {
 
     /**
@@ -39,6 +44,8 @@ public class BookController {
      * @return {@link List}<{@link Book}>
      */
     @GetMapping
+    @ApiOperation(value = "Return all books", response = Book[].class)
+    @ApiResponse(code = 200, message = "Books successfully retrieved")
     public List<Book> findAll() {
         return bookRepository.findAll();
     }
@@ -51,6 +58,11 @@ public class BookController {
      * @throws BookIdNotFoundException when book not found
      */
     @GetMapping(EndPoints.PATH_CONSTANT_ID)
+    @ApiOperation(value = "Return one book", response = Book[].class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Book successfully retrieved"),
+            @ApiResponse(code = 404, message = "Book not found")
+    })
     public Book findOne(@PathVariable Long id) {
         return bookRepository.findById(id)
                 .orElseThrow(BookIdNotFoundException::new);
@@ -64,6 +76,8 @@ public class BookController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create a book with the data from a book object, return book created", response = Book.class)
+    @ApiResponse(code = 201, message = "Book created successfully")
     public Book createBook(@RequestBody Book book) {
         return bookRepository.save(book);
     }
@@ -75,6 +89,8 @@ public class BookController {
      */
     @DeleteMapping(EndPoints.PATH_CONSTANT_ID)
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @ApiOperation(value = "Delete a book with a specific id", response = Book.class)
+    @ApiResponse(code = 202, message = "Book deleted successfully")
     public void deleteBook(@PathVariable Long id) {
         bookRepository.deleteById(id);
     }
@@ -89,6 +105,12 @@ public class BookController {
      * @throws BookIdNotFoundException when book not found
      */
     @PutMapping(EndPoints.PATH_CONSTANT_ID)
+    @ApiOperation(value = "Update a book with the id from book object and a specific book id param, return book updated", response = Book.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Book successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request from the validation"),
+            @ApiResponse(code = 404, message = "Book not found")
+    })
     public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
         if (book.getId() != id) {
             throw new IdMismatchException();
