@@ -97,7 +97,7 @@ public class UserController {
      * @throws UserNotFoundException   when User is not found
      */
     @PutMapping(EndPoints.PATH_CONSTANT_ID)
-    public User updateBook(@RequestBody User user, @PathVariable Long id) {
+    public User updateUser(@RequestBody User user, @PathVariable Long id) {
         if (user.getId() != id) {
             throw new UserIdMismatchException();
         }
@@ -116,7 +116,7 @@ public class UserController {
      */
     @PutMapping(EndPoints.PATH_CONSTANT_ID +
             EndPoints.BOOKS_PATH + EndPoints.BOOK_ID_PATH)
-    public User addBook(@PathVariable long id, @PathVariable long bookId) {
+    public User addBook(@PathVariable Long id, @PathVariable Long bookId) {
         Optional<User> user = userRepository.findById(id);
         user.get().addBook(bookRepository.findById(bookId).orElseThrow(BookIdNotFoundException::new));
         return userRepository.save(user.get());
@@ -132,7 +132,7 @@ public class UserController {
      */
     @DeleteMapping(EndPoints.PATH_CONSTANT_ID +
             EndPoints.BOOKS_PATH + EndPoints.BOOK_ID_PATH)
-    public User removeBook(@PathVariable long id, @PathVariable long bookId) {
+    public User removeBook(@PathVariable Long id, @PathVariable Long bookId) {
         Optional<User> user = userRepository.findById(id);
         user.get().removeBook(bookRepository.findById(bookId).orElseThrow(BookIdNotFoundException::new));
         return userRepository.save(user.get());

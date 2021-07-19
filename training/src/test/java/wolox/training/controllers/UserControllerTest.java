@@ -49,9 +49,13 @@ public class UserControllerTest {
 
     private User user;
 
+    private User user2;
+
     private List<Book> listBooks;
 
     private Book book;
+
+    private Book book2;
 
     private ObjectMapper objectMapper;
 
@@ -60,7 +64,7 @@ public class UserControllerTest {
         objectMapper = new ObjectMapper();
         listBooks = new ArrayList<>();
         book = new Book();
-        book.setId(1L);
+        book.setId(3L);
         book.setAuthor("Paulline Asgar");
         book.setImage("123zx53");
         book.setIsbn("12-c2-98");
@@ -70,8 +74,8 @@ public class UserControllerTest {
         book.setPages(470);
         book.setGenre("Love");
         book.setYear("2015");
-        Book book2 = new Book();
-        book2.setId(3L);
+        book2 = new Book();
+        book2.setId(1L);
         book2.setAuthor("Susanne Collins");
         book2.setImage("image2.jpg");
         book2.setIsbn("775-32");
@@ -89,6 +93,11 @@ public class UserControllerTest {
         user.setName("Juan Daniel");
         user.setBirthdate(LocalDate.of(1990, 03, 03));
         user.setBooks(listBooks);
+        user2 = new User();
+        user2.setId(18L);
+        user2.setUsername("rucho");
+        user2.setName("Juan Daniel");
+        user2.setBirthdate(LocalDate.of(1990, 03, 03));
 
     }
 
@@ -134,6 +143,83 @@ public class UserControllerTest {
         mvc.perform(delete(EndPoints.USER_BASE_PATH + TestConstants.USER_MOCK_ID_19)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
+    }
+
+    @Test
+    void whenUpdateAUserThatExists_thenReturnOk() throws Exception {
+        Optional<User> optionalUser = Optional.of(user);
+
+
+        Mockito.when(userRepository.findById(TestConstants.USER_EXISTS_19)).thenReturn(optionalUser);
+        Mockito.when(userRepository.save(user)).thenReturn(user);
+
+        mvc.perform(put(EndPoints.USER_BASE_PATH + TestConstants.USER_MOCK_ID_19)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isOk());
+    }
+
+
+    @Test
+    public void whenDeleteUserBook_ThenDeletedUserBookOk() throws Exception {
+
+        Optional<User> optionalUser = Optional.of(user);
+        Optional<Book> optionalBook = Optional.of(book2);
+
+        Mockito.when(userRepository.findById(TestConstants.USER_EXISTS_19)).thenReturn(optionalUser);
+        Mockito.when(bookRepository.findById(TestConstants.CONSTANT_ID)).thenReturn(optionalBook);
+        Mockito.when(userRepository.save(user)).thenReturn(user);
+
+        mvc.perform(delete(EndPoints.USER_BASE_PATH + TestConstants.USER_MOCK_ID_19 +
+                EndPoints.BOOKS_PATH + TestConstants.BOOK_MOCK_PATH))
+                .andExpect(status().isOk());
+
+
+    }
+
+    @Test
+    public void whenAddUserBook_ThenReturnOk() throws Exception {
+        Optional<User> optionalUser = Optional.of(user2);
+        Optional<Book> optionalBook = Optional.of(book2);
+
+        Mockito.when(userRepository.findById(18L)).thenReturn(optionalUser);
+        Mockito.when(bookRepository.findById(TestConstants.CONSTANT_ID)).thenReturn(optionalBook);
+        Mockito.when(userRepository.save(user)).thenReturn(user);
+
+        mvc.perform(put(EndPoints.USER_BASE_PATH + TestConstants.NEW_USER_MOCK_ID +
+                EndPoints.BOOKS_PATH + TestConstants.BOOK_MOCK_PATH))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void whenAddUserBook_ThenReturnBookAlreadyOwned() throws Exception {
+        Optional<User> optionalUser = Optional.of(user);
+        Optional<Book> optionalBook = Optional.of(book);
+
+        Mockito.when(userRepository.findById(TestConstants.USER_EXISTS_19)).thenReturn(optionalUser);
+        Mockito.when(bookRepository.findById(TestConstants.CONSTANT_ID)).thenReturn(optionalBook);
+        Mockito.when(userRepository.save(user)).thenReturn(user);
+
+        mvc.perform(put(EndPoints.USER_BASE_PATH + TestConstants.USER_MOCK_ID_19 +
+                EndPoints.BOOKS_PATH + TestConstants.BOOK_MOCK_PATH))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    public void whenAddUserBook_ThenReturnIdNotFound() throws Exception {
+        Optional<User> optionalUser = Optional.of(user);
+        Optional<Book> optionalBook = Optional.of(book);
+
+        Mockito.when(userRepository.findById(TestConstants.USER_EXISTS_19)).thenReturn(optionalUser);
+        Mockito.when(bookRepository.findById(TestConstants.BOOK_EXISTS)).thenReturn(optionalBook);
+        Mockito.when(userRepository.save(user)).thenReturn(user);
+
+        mvc.perform(put(EndPoints.USER_BASE_PATH + TestConstants.USER_MOCK_ID_19 +
+                EndPoints.BOOKS_PATH + TestConstants.BOOK_MOCK_PATH))
+                .andExpect(status().isNotFound());
+
     }
 
 }
