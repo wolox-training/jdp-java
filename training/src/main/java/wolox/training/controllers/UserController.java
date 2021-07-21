@@ -2,6 +2,7 @@ package wolox.training.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,9 @@ public class UserController {
     @Autowired
     BookRepository bookRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     /**
      * Find all list.
      *
@@ -73,6 +77,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -101,8 +106,9 @@ public class UserController {
         if (user.getId() != id) {
             throw new UserIdMismatchException();
         }
-        userRepository.findById(id)
+        User userDB = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
+        user.setPassword(passwordEncoder.encode(userDB.getPassword()));
         return userRepository.save(user);
     }
 
