@@ -2,6 +2,7 @@ package wolox.training.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -142,6 +143,17 @@ public class UserController {
         Optional<User> user = userRepository.findById(id);
         user.get().removeBook(bookRepository.findById(bookId).orElseThrow(BookIdNotFoundException::new));
         return userRepository.save(user.get());
+    }
+
+    /**
+     * Retrieves the username of the logged in user
+     *
+     * @param authentication: Authentication context (Authentication)
+     * @return Username username of the logged in user
+     */
+    @GetMapping(value = EndPoints.USERNAME_PATH)
+    public String currentUserName(Authentication authentication) {
+        return authentication.getName();
     }
 
 }

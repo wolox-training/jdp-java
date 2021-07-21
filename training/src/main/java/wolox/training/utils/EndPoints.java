@@ -6,6 +6,7 @@ public class EndPoints {
     public static final String PATH_CONSTANT_ID = "/{id}";
     public static final String USER_BASE_PATH = "/api/users";
     public static final String BOOK_ID_PATH = "/{bookId}";
+    public static final String USERNAME_PATH = "/username";
 
 
     private EndPoints() {
