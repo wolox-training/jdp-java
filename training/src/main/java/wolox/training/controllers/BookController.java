@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +20,11 @@ import wolox.training.exceptions.BookIdNotFoundException;
 import wolox.training.exceptions.IdMismatchException;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
+import wolox.training.services.OpenLibraryService;
 import wolox.training.utils.EndPoints;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The CRUD Book controller.
@@ -36,6 +39,12 @@ public class BookController {
      */
     @Autowired
     BookRepository bookRepository;
+
+    /**
+     * The Open library service.
+     */
+    @Autowired
+    OpenLibraryService openLibraryService;
 
 
     /**
@@ -53,7 +62,7 @@ public class BookController {
     /**
      * This method find book by id param
      *
-     * @param id: Id of the book
+     * @param id : Id of the book
      * @return {@link Book}
      * @throws BookIdNotFoundException when book not found
      */
@@ -85,7 +94,7 @@ public class BookController {
     /**
      * This method delete book by id param
      *
-     * @param id: Id of the book
+     * @param id : Id of the book
      */
     @DeleteMapping(EndPoints.PATH_CONSTANT_ID)
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -98,8 +107,8 @@ public class BookController {
     /**
      * Update book.
      *
-     * @param {@link Book} the book
-     * @param id:    the id of the book
+     * @param book the book
+     * @param id   :    the id of the book
      * @return {@link Book}
      * @throws IdMismatchException     when id's doesn't match
      * @throws BookIdNotFoundException when book not found
@@ -118,5 +127,30 @@ public class BookController {
         bookRepository.findById(id)
                 .orElseThrow(BookIdNotFoundException::new);
         return bookRepository.save(book);
+    }
+
+    /**
+     * Find book by isbn response entity.
+     *
+     * @param isbn the isbn
+     * @return the response entity
+     * @throws BookIdNotFoundException when book not found
+     */
+    @GetMapping("/isbn/{isbn}")
+    @ApiOperation(value = "Method to consume an external api if the book doesn't exist in the repository",
+            response = Book.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Book successfully retrieved"),
+            @ApiResponse(code = 201, message = "Bad successfully created"),
+            @ApiResponse(code = 404, message = "Book not found in the external api")
+    })
+    public ResponseEntity<Book> findBookByIsbn(@PathVariable String isbn) {
+        Optional<Book> bookLocal = bookRepository.findByIsbn(isbn);
+        if (!bookLocal.isPresent()) {
+            Book bookApi = openLibraryService.bookInfo(isbn);
+            return ResponseEntity.status(HttpStatus.CREATED).body(bookRepository.save(bookApi));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(bookLocal.get());
+        }
     }
 }
