@@ -23,6 +23,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     Optional<User> findByUsername(String username);
 
+    /**
+     * Find by birthdate between and name containing ignore case list.
+     *
+     * @param birthdateStart the birthdate start
+     * @param birthdateEnd   the birthdate end
+     * @param name           the name
+     * @return the list of {@link User}
+     */
     @Query("SELECT u FROM User u "
             + " WHERE (:birthdateStart is null or u.birthdate between :birthdateStart and :birthdateEnd)"
             + " AND (:name is null or UPPER(u.name) like UPPER(concat('%', :name,'%')))")
