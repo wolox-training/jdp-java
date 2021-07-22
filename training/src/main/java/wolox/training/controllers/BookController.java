@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import wolox.training.exceptions.BookIdNotFoundException;
@@ -53,10 +54,21 @@ public class BookController {
      * @return {@link List}<{@link Book}>
      */
     @GetMapping
-    @ApiOperation(value = "Return all books", response = Book[].class)
+    @ApiOperation(value = "Return all books with any parameter entered", response = Book[].class)
     @ApiResponse(code = 200, message = "Books successfully retrieved")
-    public List<Book> findAll() {
-        return bookRepository.findAll();
+    public List<Book> findAll(
+            @RequestParam(value = "publisher", required = false) String publisher,
+            @RequestParam(value = "year", required = false) String year,
+            @RequestParam(required = false) String genre,
+            @RequestParam(value = "author", required = false) String author,
+            @RequestParam(value = "isbn", required = false) String isbn,
+            @RequestParam(value = "image", required = false) String image,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "subtitle", required = false) String subtitle,
+            @RequestParam(value = "pages", required = false) Integer pages
+    ) {
+        return bookRepository.findAll(publisher, year, genre, author, isbn, image,
+                title, subtitle, pages);
     }
 
     /**
@@ -114,7 +126,8 @@ public class BookController {
      * @throws BookIdNotFoundException when book not found
      */
     @PutMapping(EndPoints.PATH_CONSTANT_ID)
-    @ApiOperation(value = "Update a book with the id from book object and a specific book id param, return book updated", response = Book.class)
+    @ApiOperation(value = "Update a book with the id from book object and a specific book id param, " +
+            "return book updated", response = Book.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Book successfully updated"),
             @ApiResponse(code = 400, message = "Bad request from the validation"),
