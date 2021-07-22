@@ -5,6 +5,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +26,7 @@ import wolox.training.exceptions.IdMismatchException;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 import wolox.training.services.OpenLibraryService;
+import wolox.training.utils.Constants;
 import wolox.training.utils.EndPoints;
 
 import java.util.List;
@@ -56,10 +61,10 @@ public class BookController {
     @GetMapping
     @ApiOperation(value = "Return all books with any parameter entered", response = Book[].class)
     @ApiResponse(code = 200, message = "Books successfully retrieved")
-    public List<Book> findAll(
+    public Page<Book> findAll(
             @RequestParam(value = "publisher", required = false) String publisher,
             @RequestParam(value = "year", required = false) String year,
-            @RequestParam(required = false) String genre,
+            @RequestParam(value = "genre", required = false) String genre,
             @RequestParam(value = "author", required = false) String author,
             @RequestParam(value = "isbn", required = false) String isbn,
             @RequestParam(value = "image", required = false) String image,
@@ -67,8 +72,9 @@ public class BookController {
             @RequestParam(value = "subtitle", required = false) String subtitle,
             @RequestParam(value = "pages", required = false) Integer pages
     ) {
+        Pageable pagination = PageRequest.of(0, 10, Sort.by(Constants.ID));
         return bookRepository.findAll(publisher, year, genre, author, isbn, image,
-                title, subtitle, pages);
+                title, subtitle, pages, pagination);
     }
 
     /**
