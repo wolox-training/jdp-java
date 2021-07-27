@@ -11,6 +11,7 @@ public class TestConstants {
     public static final Long BOOK_EXISTS = 3L;
     public static final String NEW_USER_MOCK_ID = "/18";
     public static final String USER_PATH_UPDATE = "/21";
+    public static final String BOOK_MOCK_EXTERNAL_ISBN = "/0385472579";
 
     private TestConstants() {
     }

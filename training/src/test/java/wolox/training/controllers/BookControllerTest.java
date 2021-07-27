@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,6 +23,7 @@ import wolox.training.models.Book;
 import wolox.training.models.User;
 import wolox.training.repositories.BookRepository;
 import wolox.training.repositories.UserRepository;
+import wolox.training.services.impl.OpenLibraryServiceImpl;
 import wolox.training.utils.EndPoints;
 import wolox.training.utils.TestConstants;
 
@@ -34,6 +36,7 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,13 +48,14 @@ class BookControllerTest {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Mock
+    private OpenLibraryServiceImpl openLibraryService;
     @MockBean
     private UserRepository userRepository;
     @MockBean
     private BookRepository bookRepository;
     @Autowired
     private MockMvc mvc;
-
     private User user;
 
     private User user2;
@@ -159,6 +163,18 @@ class BookControllerTest {
 
         mvc.perform(put(EndPoints.BOOK_BASE_PATH + TestConstants.BOOK_MOCK_ID)
                 .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(book)))
+                .andExpect(status().isOk());
+    }
+
+    @WithMockUser(value = "joseph")
+    @Test
+    void FindABookThatExistsByIsbn_thenReturnOk() throws Exception {
+        Optional<Book> optionalBook = Optional.of(book);
+        when(bookRepository.findById(TestConstants.BOOK_EXISTS)).thenReturn(optionalBook);
+        when(openLibraryService.bookInfo(TestConstants.BOOK_MOCK_EXTERNAL_ISBN)).thenReturn(book);
+        when(bookRepository.save(book)).thenReturn(book);
+        mvc.perform(get(EndPoints.WIREMOCK_PATH).contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(book)))
                 .andExpect(status().isOk());
     }
