@@ -175,7 +175,7 @@ class BookControllerTest {
         when(openLibraryService.bookInfo(TestConstants.BOOK_MOCK_EXTERNAL_ISBN)).thenReturn(book);
         when(bookRepository.save(book)).thenReturn(book);
         mvc.perform(get(EndPoints.WIREMOCK_PATH).contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString("resources/WireMock/__files/response_ok_isbn.json")))
+                .content(objectMapper.writeValueAsString(book)))
                 .andExpect(status().isOk());
     }
 }
