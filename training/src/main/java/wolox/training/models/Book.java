@@ -2,10 +2,12 @@ package wolox.training.models;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.Column;
@@ -22,7 +24,7 @@ import static wolox.training.utils.ErrorMessage.*;
 /**
  * The class Book model.
  */
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -31,6 +33,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Setter(AccessLevel.NONE)
     private Long id;
 
     @Column
@@ -69,10 +72,6 @@ public class Book {
     @ApiModelProperty(notes = "The code of the book")
     private String isbn;
 
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public void setGenre(String genre) {
         checkNotNull(genre, NOT_NULL_MESSAGE);
