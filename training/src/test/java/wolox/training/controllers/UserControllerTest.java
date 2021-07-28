@@ -68,7 +68,6 @@ public class UserControllerTest {
         objectMapper = new ObjectMapper();
         listBooks = new ArrayList<>();
         book = new Book();
-        book.setId(3L);
         book.setAuthor("Paulline Asgar");
         book.setImage("123zx53");
         book.setIsbn("12-c2-98");
@@ -79,7 +78,6 @@ public class UserControllerTest {
         book.setGenre("Love");
         book.setYear("2015");
         book2 = new Book();
-        book2.setId(1L);
         book2.setAuthor("Susanne Collins");
         book2.setImage("image2.jpg");
         book2.setIsbn("775-32");
@@ -92,14 +90,12 @@ public class UserControllerTest {
         listBooks.add(book);
         listBooks.add(book2);
         user = new User();
-        user.setId(21L);
         user.setUsername("joseph");
         user.setName("Juan Daniel");
         user.setPassword("panda15");
         user.setBirthdate(LocalDate.of(1990, 03, 03));
         user.setBooks(listBooks);
         user2 = new User();
-        user2.setId(18L);
         user2.setUsername("rucho");
         user2.setName("Juan Daniel");
         user2.setPassword("123");
